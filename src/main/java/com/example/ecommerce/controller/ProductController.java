@@ -57,4 +57,15 @@ public class ProductController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    
+    /**
+     * Search products by name.
+     * GET /api/products/search?q=query
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam("q") String query) {
+        log.info("GET /api/products/search?q={} - Searching products", query);
+        List<Product> products = productService.searchProducts(query);
+        return ResponseEntity.ok(products);
+    }
 }

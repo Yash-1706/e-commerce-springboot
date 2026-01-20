@@ -72,4 +72,12 @@ public class ProductService {
                 .map(product -> product.getStock() >= requiredQuantity)
                 .orElse(false);
     }
+    
+    /**
+     * Search products by name.
+     */
+    public List<Product> searchProducts(String query) {
+        log.info("Searching products with query: {}", query);
+        return productRepository.findByNameContainingIgnoreCase(query);
+    }
 }

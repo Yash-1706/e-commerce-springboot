@@ -1,162 +1,81 @@
 # E-Commerce Backend API
 
-A minimal e-commerce backend system built with Spring Boot and MongoDB.
+A robust, minimal e-commerce backend built with **Spring Boot** and **MongoDB**. This project serves as the "invisible engine" for an online store, handling product management, shopping carts, orders, and payment processing.
 
-## Features
+## 🚀 Project Overview
 
-- **Product Management**: Create and list products
-- **Cart Management**: Add items to cart, view cart, clear cart
-- **Order Management**: Create orders from cart, view orders, cancel orders
-- **Payment Processing**: Mock payment service with webhook callbacks
-- **User Management**: User registration and retrieval
+This API manages the core lifecycle of an e-commerce transaction:
+1.  **Product Discovery**: Listing and managing inventory.
+2.  **Shopping Cart**: persistent cart management for users.
+3.  **Order Processing**: Converting carts to orders.
+4.  **Payments**: Mock payment integration with webhook callbacks for asynchronous status updates.
 
-## Tech Stack
+Built with **Clean Architecture** principles to ensure scalability and maintainability.
 
-- Java 17
-- Spring Boot 3.2.0
-- Spring Data MongoDB
-- Lombok
-- Maven
+## ✨ Key Features
 
-## Project Structure
+*   **📦 Product Management**: CRUD operations for products with stock tracking.
+*   **🛒 Smart Cart**: Add/remove items, auto-calculation of totals.
+*   **💳 Mock Payment System**: Simulates real-world payment gateways with webhook confirmations.
+*   **⚡ Async Webhooks**: Handles payment success callbacks to update order status automatically.
+*   **🔒 Secure Configuration**: Sensitive data handling patterns.
 
-```
-com.example.ecommerce
-├── controller/     # REST API endpoints
-├── service/        # Business logic
-├── repository/     # MongoDB repositories
-├── model/          # Domain entities
-├── dto/            # Data Transfer Objects
-├── config/         # Configuration classes
-├── exception/      # Exception handling
-└── webhook/        # Webhook handlers
-```
+## 🛠️ Tech Stack
 
-## Getting Started
+*   **Java 17**
+*   **Spring Boot 3.2.0**
+*   **Spring Data MongoDB**
+*   **Lombok**
+*   **Maven**
+
+## 🏗️ Architecture
+
+The project follows a layered architecture to separate concerns:
+*   **Controller**: Handles incoming REST requests.
+*   **Service**: Contains business logic (e.g., order validation, stock checking).
+*   **Repository**: Data access layer for MongoDB.
+*   **DTO**: Data Transfer Objects for secure API communication.
+
+## 🏁 Getting Started
 
 ### Prerequisites
+*   Java 17+
+*   Maven 3.6+
+*   MongoDB (Local or Atlas)
 
-- Java 17+
-- Maven 3.6+
-- MongoDB Atlas account (or local MongoDB)
-
-### Configuration
-
-Update `src/main/resources/application.yaml` with your MongoDB connection:
-
+### 1. Configure Database
+Update `src/main/resources/application.yaml` (rename `.example` if needed):
 ```yaml
 spring:
   data:
     mongodb:
-      uri: your-mongodb-uri
-      database: ecommerce
+      uri: mongodb://localhost:27017/ecommerce
 ```
 
-### Running the Application
-
-1. **Start Mock Payment Service** (Port 8081):
+### 2. Run the Services
+**Step 1: Start Mock Payment Service** (Port 8081)
 ```bash
 cd mock-payment-service
 mvn spring-boot:run
 ```
 
-2. **Start E-Commerce API** (Port 8080):
+**Step 2: Start Main API** (Port 8080)
 ```bash
-cd ..
+# In a new terminal, from project root
 mvn spring-boot:run
 ```
 
-## API Endpoints
+## 🔌 API Endpoints
 
-### Products
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/products` | Create a product |
-| GET | `/api/products` | Get all products |
-| GET | `/api/products/{id}` | Get product by ID |
+| Module | Method | Endpoint | Description |
+| :--- | :--- | :--- | :--- |
+| **Products** | `GET` | `/api/products` | List all products |
+| | `POST` | `/api/products` | Create a product |
+| **Cart** | `POST` | `/api/cart/add` | Add item to cart |
+| | `GET` | `/api/cart/{userId}` | View user cart |
+| **Orders** | `POST` | `/api/orders` | Checkout cart to order |
+| | `GET` | `/api/orders/user/{userId}` | List user orders |
+| **Payments** | `POST` | `/api/payments/create` | Initiate payment |
 
-### Cart
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/cart/add` | Add item to cart |
-| GET | `/api/cart/{userId}` | Get user's cart |
-| DELETE | `/api/cart/{userId}/clear` | Clear cart |
-
-### Orders
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/orders` | Create order from cart |
-| GET | `/api/orders/{orderId}` | Get order details |
-| GET | `/api/orders/user/{userId}` | Get user's orders |
-| POST | `/api/orders/{orderId}/cancel` | Cancel order |
-
-### Payments
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/payments/create` | Create payment |
-| GET | `/api/payments/order/{orderId}` | Get payment by order |
-
-### Webhooks
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/webhooks/payment` | Payment callback |
-
-### Users
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/users` | Create user |
-| GET | `/api/users` | Get all users |
-| GET | `/api/users/{id}` | Get user by ID |
-
-## Order Flow
-
-1. Create products
-2. Add items to cart
-3. Create order from cart
-4. Initiate payment
-5. Webhook updates order status (after 3 seconds)
-6. Check order status
-
-## Sample Requests
-
-### Create Product
-```json
-POST /api/products
-{
-  "name": "Laptop",
-  "description": "Gaming Laptop",
-  "price": 50000.0,
-  "stock": 10
-}
-```
-
-### Add to Cart
-```json
-POST /api/cart/add
-{
-  "userId": "user123",
-  "productId": "product-id",
-  "quantity": 2
-}
-```
-
-### Create Order
-```json
-POST /api/orders
-{
-  "userId": "user123"
-}
-```
-
-### Create Payment
-```json
-POST /api/payments/create
-{
-  "orderId": "order-id",
-  "amount": 100000.0
-}
-```
-
-## License
-
+## 📜 License
 MIT

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller for order operations.
@@ -62,5 +63,21 @@ public class OrderController {
         log.info("GET /api/orders/user/{} - Fetching user orders", userId);
         List<Order> orders = orderService.getOrdersByUserId(userId);
         return ResponseEntity.ok(orders);
+    }
+    
+    /**
+     * Cancel an order.
+     * POST /api/orders/{orderId}/cancel
+     */
+    @PostMapping("/{orderId}/cancel")
+    public ResponseEntity<?> cancelOrder(@PathVariable String orderId) {
+        log.info("POST /api/orders/{}/cancel - Cancelling order", orderId);
+        try {
+            orderService.cancelOrder(orderId);
+            return ResponseEntity.ok(Map.of("message", "Order cancelled successfully"));
+        } catch (RuntimeException e) {
+            log.error("Error cancelling order: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        }
     }
 }

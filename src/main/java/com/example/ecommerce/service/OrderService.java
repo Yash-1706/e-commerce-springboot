@@ -156,4 +156,28 @@ public class OrderService {
                 .payment(paymentInfo)
                 .build();
     }
+    
+    /**
+     * Cancel an order if not yet paid.
+     */
+    @Transactional
+    public void cancelOrder(String orderId) {
+        log.info("Cancelling order: {}", orderId);
+        
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+        
+        if (!"CREATED".equals(order.getStatus())) {
+            throw new RuntimeException("Cannot cancel order. Current status: " + order.getStatus());
+        }
+        
+        // Restore stock for all items
+        for (OrderItem item : order.getItems()) {
+            productService.updateStock(item.getProductId(), item.getQuantity());
+        }
+        
+        order.setStatus("CANCELLED");
+        orderRepository.save(order);
+        log.info("Order {} cancelled successfully", orderId);
+    }
 }

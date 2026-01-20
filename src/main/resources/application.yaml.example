@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ecommerce
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/ecommerce}
+      database: ecommerce
+
+server:
+  port: 8080
+
+# Mock Payment Service URL
+payment:
+  service:
+    url: ${PAYMENT_SERVICE_URL:http://localhost:8081}

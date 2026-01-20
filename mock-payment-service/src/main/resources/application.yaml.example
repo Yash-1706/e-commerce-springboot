@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: mock-payment-service
+
+server:
+  port: 8081
+
+# E-Commerce API webhook URL
+ecommerce:
+  webhook:
+    url: ${ECOMMERCE_WEBHOOK_URL:http://localhost:8080/api/webhooks/payment}
+
+# Simulated payment delay in milliseconds
+payment:
+  processing:
+    delay: 3000
